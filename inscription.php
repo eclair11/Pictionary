@@ -110,13 +110,15 @@
             <span class="form_hint">Les mots de passes doivent être égaux.</span>
             <script>  
                 validateMdp2 = function(e) {  
-                    var mdp1 = document.getElementById('mdp1');  
-                    var mdp2 = document.getElementById('mdp2');  
-                    if (mdp1.value == mdp2.value) {  
+                    var mdp1 = document.getElementById('mdp1').value;  
+                    var mdp2 = document.getElementById('mdp2').value;  
+                    if (mdp1.length > 5 && mdp1.length < 9 && mdp1 == mdp2) {  
                         // ici on supprime le message d'erreur personnalisé, et du coup mdp2 devient valide.  
+						document.getElementById('mdp1').setCustomValidity('');
                         document.getElementById('mdp2').setCustomValidity('');  
                     } else {  
                         // ici on ajoute un message d'erreur personnalisé, et du coup mdp2 devient invalide.  
+						document.getElementById('mdp1').setCustomValidity('De 6 à 8 caractères alphanumériques.');
                         document.getElementById('mdp2').setCustomValidity('Les mots de passes doivent être égaux.');  
                     }  
                 }  
@@ -126,6 +128,11 @@
             <label for="birthdate">Date de naissance:</label>  
             <input type="date" name="birthdate" id="birthdate" placeholder="JJ/MM/AAAA" required onchange="computeAge()"/>  
             <script>  
+			function age()
+			{
+				var birthday = new Date(document.getElementById("birthdate").value);
+				return new Number((new Date().getTime() - birthday.getTime()) / 31536000000).toFixed(0);
+			}
                 computeAge = function(e) {  
                     try{  
                         // j'affiche dans la console quelques objets javascript, ce qui devrait vous aider.  
@@ -136,6 +143,7 @@
                         console.log(new Date(0).getYear());  
                         console.log(new Date(65572346585).getYear());  
                         // modifier ici la valeur de l'élément age  
+						document.getElementById("age").value=age();
                     } catch(e) {  
                         // supprimez ici la valeur de l'élément age  
                     }  
