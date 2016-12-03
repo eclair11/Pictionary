@@ -23,7 +23,6 @@
 	-->
     <span class="required_notification">Les champs obligatoires sont indiqués par *</span>
     <ul>
-        </li>
         <li>
             <label for="email">E-mail :</label>
             <input type="email" name="email" id="email" autofocus required />
@@ -52,16 +51,16 @@
         </li>
         <li>
             <label>Sexe :</label>
-            <input type="radio" name="gender" value="male">Homme</input><br />
-			<input type="radio" name="gender" value="female">Femme</input>
+            <input type="radio" name="sexe" value="H">Homme</input><br />
+			<input type="radio" name="sexe" value="F">Femme</input>
         </li>
         <li>
-            <label for="phone">Téléphone :</label>
-            <input type="tel" name="phone" id="phone" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" />
+            <label for="tel">Téléphone :</label>
+            <input type="tel" name="tel" id="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" />
         </li>
         <li>
-            <label for="web">Site web :</label>
-            <input type="url" name="web" id="web" value="http://" />
+            <label for="website">Site web :</label>
+            <input type="url" name="website" id="website" value="http://" />
         </li>
         <li>
             <label for="ville">Ville :</label>
@@ -72,8 +71,8 @@
             <input type="range" name="taille" id="taille" min="0" max="2.50" step="0.01" />
         </li>
 		<li>
-            <label for="colour">Couleur :</label>
-            <input type="color" name="colour" value="Noir" />
+            <label for="couleur">Couleur :</label>
+            <input type="color" name="couleur" value="Black" />
         </li>
 		<li>
             <label for="mdp1">Mot de passe :</label>
