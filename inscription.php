@@ -177,7 +177,7 @@
                     var canvas = document.getElementById("preview");  
                     var ctx = canvas.getContext("2d");  
                     // on réinitialise le canvas: on l'efface, et déclare sa largeur et hauteur à 0  
-                    ctx.setFillColor("white");  
+                    //ctx.setFillColor("white");
                     ctx.fillRect(0,0,canvas.width,canvas.height);  
                     canvas.width=0;  
                     canvas.height=0;  
@@ -211,8 +211,8 @@
                             // Vous devez supprimer ces lignes, et modifier width et height pour:  
                             //    - garder les proportions,   
                             //    - et que le maximum de width et height soit égal à 96  
-                            var width = MAX_WIDTH;  
-                            var height = MAX_HEIGHT;  
+                            var width = MAX_WIDTH;
+                            var height = MAX_HEIGHT;
                               
                             canvas.width = width;  
                             canvas.height = height;  
@@ -220,9 +220,10 @@
                             // et avec une largeur de width et une hauteur de height  
                             ctx.drawImage(img, 0, 0, width, height);  
                             // on exporte le contenu du canvas (l'image redimensionnée) sous la forme d'une data url  
-                            var dataurl = canvas.toDataURL("image/png");  
+                            var dataurl = canvas.toDataURL("image/png");
+                            console.log(dataurl);
                             // on donne finalement cette dataurl comme valeur au champs profilepic  
-                            document.getElementById("profilepic").value = dataurl;  
+                            document.getElementById("profilepic").value = dataurl;
                         };  
                     }  
                     // on charge l'image pour de vrai, lorsque ce sera terminé le callback loadProfilePic sera appelé.  

@@ -77,6 +77,7 @@ try {
                     $_SESSION["id"]=$res->id;
                     $_SESSION["nom"]=$res->nom;
                     $_SESSION["prenom"]=$res->prenom;
+                    $_SESSION["profilepic"]=$res->profilepic;
                 }
             }
 
