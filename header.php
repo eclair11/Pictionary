@@ -5,7 +5,9 @@ if(isset($_SESSION['id'])) {
     echo '<br />';
     echo '<img src="'.$_SESSION['profilepic'].'" />';
     echo '<br />';
-    echo '<a href="logout.php" > Déconnexion </a>';
+    echo '<a href="logout.php"> Déconnexion </a>';
+	echo '<br />';
+	echo '<a href="paint.php"> Painture </a>';
 }
 else {
 ?>
@@ -25,5 +27,5 @@ else {
     </body>
     </html>
 <?php
-    echo '<a href="inscription.php" > Inscription </a>';
+    echo '<a href="inscription.php"> Inscription </a>';
 }

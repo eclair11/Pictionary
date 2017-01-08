@@ -13,10 +13,6 @@ if ($sql->rowCount() > 0) {
         $_SESSION["prenom"]=$res->prenom;
         $_SESSION["profilepic"]=$res->profilepic;
     }
-    header('Location: http://localhost/main.php');
-    exit();
 }
-else {
-    header('Location: http://localhost/main.php');
-    exit();
-}
+header('Location: http://localhost/main.php');
+exit();
