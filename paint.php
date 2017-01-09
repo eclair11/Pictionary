@@ -30,6 +30,7 @@ if(!isset($_SESSION['prenom'])) {
   
         var setSize = function() {  
             // ici, récupèrez la taille dans le tableau de tailles, en fonction de la valeur choisie dans le champs taille.  
+			size = sizes[document.getElementById('size').value]; 
             console.log("size:" + size);  
         }  
   
@@ -52,9 +53,11 @@ if(!isset($_SESSION['prenom'])) {
                 var command = {};  
                 command.command="start";  
                 command.x=e.x;  
-                ...  
+				command.y=e.y;
+				command.color=e.color;
+				command.size=e.size;
                 //c'est équivalent à:   
-                command = {"command":"start", "x": e.x, ...};  
+                command = {"command":"start", "x": e.x, "y": e.y, "color": e.color, "size": e.size};  
   
                 // Ce genre d'objet Javascript simple est nommé JSON. Pour apprendre ce qu'est le JSON, c.f. http://blog.xebia.fr/2008/05/29/introduction-a-json/  
   
@@ -62,6 +65,11 @@ if(!isset($_SESSION['prenom'])) {
                 drawingCommands.push(command);  
   
                 // ici, dessinez un cercle de la bonne couleur, de la bonne taille, et au bon endroit.   
+				context.beginPath();
+				context.arc(command.x,command.y,size,0,2*Math.PI);
+				context.stroke();
+				context.fillStyle = color;
+				context.fill();
   
                 isDrawing = true;  
             }  
@@ -74,7 +82,14 @@ if(!isset($_SESSION['prenom'])) {
             var draw = function(e) {  
                 if(isDrawing) {  
                     // ici, créer un nouvel objet qui représente une commande de type "draw", avec la position, et l'ajouter à la liste des commandes.  
+					command = {"command":"draw", "x": e.x, "y": e.y};
+					drawingCommands.push(command);
                     // ici, dessinez un cercle de la bonne couleur, de la bonne taille, et au bon endroit.   
+					context.beginPath();
+					context.arc(command.x,command.y,size,0,2*Math.PI);
+					context.stroke();
+					context.fillStyle = color;
+					context.fill();
                 }  
             }  
   
@@ -86,7 +101,10 @@ if(!isset($_SESSION['prenom'])) {
             document.getElementById('restart').onclick = function() {  
                 console.log("clear");  
                 // ici ajouter à la liste des commandes une nouvelle commande de type "clear"  
+				command = {"command":"clear"};
+				drawingCommands.push(command);
                 // ici, effacer le context, grace à la méthode clearRect.  
+				context.clearRect(0,0,canvas.width,canvas.height);
             };  
   
             document.getElementById('validate').onclick = function() {  
@@ -94,6 +112,7 @@ if(!isset($_SESSION['prenom'])) {
                 document.getElementById('drawingCommands').value = JSON.stringify(drawingCommands);  
   
                 // ici, exportez le contenu du canvas dans un data url, et ajoutez le en valeur au champs "picture" pour l'envoyer au serveur.  
+				document.getElementById('picture').value = canvas.toDataURL();
             };  
         };  
     </script>  
@@ -103,12 +122,16 @@ if(!isset($_SESSION['prenom'])) {
 <canvas id="myCanvas"></canvas>  
   
 <form name="tools" action="req_paint.php" method="post">  
-    <!-- ici, insérez un champs de type range avec id="size", pour choisir un entier entre 0 et 4) -->  
+    <!-- ici, insérez un champs de type range avec id="size", pour choisir un entier entre 0 et 4) --> 
+	<input id="size" type="range" min="0" max="3" />
     <!-- ici, insérez un champs de type color avec id="color", et comme valeur l'attribut  de session couleur (à l'aide d'une commande php echo).) -->  
-  
+	<input id="color" type="color" value="<?php echo('#'.$_SESSION['couleur']); ?>" />
     <input id="restart" type="button" value="Recommencer"/>  
     <input type="hidden" id="drawingCommands" name="drawingCommands"/>  
     <!-- à quoi servent ces champs hidden ? -->  
+	<!--
+	ces champs hidden servent à stocker les commandes et le dessin afin de les envoyer au serveur
+	-->
     <input type="hidden" id="picture" name="picture"/>  
     <input id="validate" type="submit" value="Valider"/>  
 </form>  
