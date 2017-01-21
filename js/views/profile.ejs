@@ -1,8 +1,12 @@
 <% var title = 'Profile' %>
-<% include head %>
+<% include head.ejs %>
 
-<h1><%=start %></h1>
-<h1><%=nom %></h1>
-<h1><%=prenom %></h1>
+<h1> Bienvenue <%=nom %> <%=prenom %> </h1>
+<br/>
+<img src=<%=profilepic %> />
+<br/>
+<a href="/paint">Painture</a>
+<br/>
+<a href="">Déconnexion</a>
 
-<% include foot %>
+<% include foot.ejs %>

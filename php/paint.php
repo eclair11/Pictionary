@@ -26,13 +26,13 @@ if(!isset($_SESSION['prenom'])) {
             // on récupère la valeur du champs couleur  
             color = document.getElementById('color').value;  
             console.log("color:" + color);  
-        }  
+        };
   
         var setSize = function() {  
             // ici, récupèrez la taille dans le tableau de tailles, en fonction de la valeur choisie dans le champs taille.  
 			size = sizes[document.getElementById('size').value]; 
             console.log("size:" + size);  
-        }  
+        };
   
         window.onload = function() {  
             var canvas = document.getElementById('myCanvas');  
@@ -72,12 +72,12 @@ if(!isset($_SESSION['prenom'])) {
 				context.fill();
   
                 isDrawing = true;  
-            }  
+            };
   
             var stopDrawing = function(e) {  
                 console.log("stop");  
                 isDrawing = false;  
-            }  
+            };
   
             var draw = function(e) {  
                 if(isDrawing) {  
@@ -91,7 +91,7 @@ if(!isset($_SESSION['prenom'])) {
 					context.fillStyle = color;
 					context.fill();
                 }  
-            }  
+            };
   
             canvas.onmousedown = startDrawing;  
             canvas.onmouseout = stopDrawing;  
