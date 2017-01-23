@@ -45,8 +45,8 @@
         </li>
         <li>
             <label>Sexe :</label>
-            <input type="radio" name="sexe" value="H">Homme</input><br />
-			<input type="radio" name="sexe" value="F">Femme</input>
+            <input type="radio" name="sexe" value="H">Homme<br />
+			<input type="radio" name="sexe" value="F">Femme
         </li>
         <li>
             <label for="tel">Téléphone :</label>
@@ -54,7 +54,7 @@
         </li>
         <li>
             <label for="website">Site web :</label>
-            <input type="url" name="website" id="website" value="http://" />
+            <input type="url" name="website" id="website" />
         </li>
         <li>
             <label for="ville">Ville :</label>
@@ -88,7 +88,7 @@
         </li>
         <li>
             <label for="mdp2">Confirmez mot de passe :</label>
-            <input required placeholder="ex: 123456" type="password" id="mdp2" required onkeyup="validateMdp2()">
+            <input required placeholder="ex: 123456" type="password" id="mdp2" onkeyup="validateMdp2()">
             <!-- ajouter à input l'attribut qui dit que c'est un champs obligatoire -->
             <!-- ajouter à input l'attribut qui donne une indication grisée (placeholder) -->
             <!-- pourquoi est-ce qu'on a pas mis un attribut name ici ? -->
@@ -102,7 +102,7 @@
 			-->
             <span class="form_hint">Les mots de passes doivent être égaux.</span>
             <script>  
-                validateMdp2 = function(e) {  
+                validateMdp2 = function(e) {
                     var mdp1 = document.getElementById('mdp1').value;  
                     var mdp2 = document.getElementById('mdp2').value;  
                     if (mdp1.length > 5 && mdp1.length < 9 && mdp1 == mdp2) {  
@@ -205,9 +205,9 @@
                             // Vous devez supprimer ces lignes, et modifier width et height pour:  
                             //    - garder les proportions,   
                             //    - et que le maximum de width et height soit égal à 96  
-                            var width = MAX_WIDTH;
-                            var height = MAX_HEIGHT;
-                              
+                            width = MAX_WIDTH;
+                            height = MAX_HEIGHT;
+
                             canvas.width = width;  
                             canvas.height = height;  
                             // on dessine l'image dans le canvas à la position 0,0 (en haut à gauche)  
@@ -218,7 +218,7 @@
                             console.log(dataurl);
                             // on donne finalement cette dataurl comme valeur au champs profilepic  
                             document.getElementById("profilepic").value = dataurl;
-                        };  
+                        }
                     }  
                     // on charge l'image pour de vrai, lorsque ce sera terminé le callback loadProfilePic sera appelé.  
                     reader.readAsDataURL(file);  

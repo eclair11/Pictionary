@@ -1,12 +1,17 @@
 <% var title = 'Profile' %>
 <% include head.ejs %>
 
-<h1> Bienvenue <%=nom %> <%=prenom %> </h1>
-<br/>
-<img src=<%=profilepic %> />
-<br/>
-<a href="/paint">Painture</a>
-<br/>
-<a href="">Déconnexion</a>
+<script>
+    if('<%= id %>' == "")
+        document.location.href="login";
+    document.write("<h1>Bienvenue <%= nom %> <%= prenom %></h1>");
+    document.write("<img src=<%= profilepic %> />");
+    document.write("<br/>");
+    document.write("<a href='/paint'>Painture</a>");
+    document.write("<br/>");
+    document.write("<a href='/logout'>Déconnexion</a>");
+    document.write("<br/>");
+    document.write("<a href='/guess'>Dessin</a>");
+</script>
 
 <% include foot.ejs %>
