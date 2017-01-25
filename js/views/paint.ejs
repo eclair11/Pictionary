@@ -1,4 +1,4 @@
-<% var title = 'Pictionnary' %>
+<% var title = 'Paint' %>
 <% include head.ejs %>
 
 <script>
@@ -10,37 +10,30 @@
     var x0, y0;
     // le tableau de commandes de dessin à envoyer au serveur lors de la validation du dessin
     var drawingCommands = [];
-
+    // on récupère la valeur du champs couleur
     var setColor = function() {
-        // on récupère la valeur du champs couleur
         color = document.getElementById('color').value;
         console.log("color:" + color);
     };
-
+    // ici, récupèrez la taille dans le tableau de tailles, en fonction de la valeur choisie dans le champs taille.
     var setSize = function() {
-        // ici, récupèrez la taille dans le tableau de tailles, en fonction de la valeur choisie dans le champs taille.
         size = sizes[document.getElementById('size').value];
         console.log("size:" + size);
     };
 
     window.onload = function() {
-
         var canvas = document.getElementById('myCanvas');
         canvas.width = 400;
         canvas.height= 400;
         var context = canvas.getContext('2d');
-
         setSize();
         setColor();
         document.getElementById('size').onchange = setSize;
         document.getElementById('color').onchange = setColor;
-
         var isDrawing = false;
 
         var startDrawing = function(e) {
-
             console.log("start");
-
             // crér un nouvel objet qui représente une commande de type "start", avec la position, la couleur
             var command = {};
             command.command="start";
@@ -50,19 +43,16 @@
             command.size=e.size;
             //c'est équivalent à:
             command = {"command":"start", "x": e.x, "y": e.y, "color": e.color, "size": e.size};
-
             // Ce genre d'objet Javascript simple est nommé JSON. Pour apprendre ce qu'est le JSON,
             // c.f. http://blog.xebia.fr/2008/05/29/introduction-a-json/
             // on l'ajoute à la liste des commandes
             drawingCommands.push(command);
-
             // ici, dessinez un cercle de la bonne couleur, de la bonne taille, et au bon endroit.
             context.beginPath();
             context.arc(command.x-50,command.y-50,size,0,2*Math.PI);
             context.stroke();
             context.fillStyle = color;
             context.fill();
-
             isDrawing = true;
         };
 
@@ -114,18 +104,19 @@
 <canvas id="myCanvas"></canvas>
 <form name="tools" action="/paint" method="post">
 <!-- ici, insérez un champs de type range avec id="size", pour choisir un entier entre 0 et 4) -->
-<input id="size" type="range" min="0" max="3" />
+    <input id="size" type="range" min="0" max="3" />
 <!-- ici, insérez un champs de type color avec id="color", et comme valeur l'attribut  de session couleur
 (à l'aide d'une commande php echo).) -->
-<input id="color" type="color" value="#<%=couleur %>" />
-<input id="restart" type="button" value="Recommencer"/>
-<input type="hidden" id="drawingCommands" name="drawingCommands"/>
+    <input id="color" type="color" value="#<%=couleur %>" />
+    <input id="restart" type="button" value="Recommencer"/>
+    <input type="hidden" id="drawingCommands" name="drawingCommands"/>
 <!-- à quoi servent ces champs hidden ? -->
 <!--
 ces champs hidden servent à stocker les commandes et le dessin afin de les envoyer au serveur
 -->
-<input type="hidden" id="picture" name="picture"/>
-<input id="validate" type="submit" value="Valider"/>
+    <input type="hidden" id="picture" name="picture"/>
+    <input id="validate" type="submit" value="Valider"/>
+    <input type="button" onclick="document.location.href='profile'" value="Retour"/>
 </form>
 
 <% include foot.ejs %>

@@ -15,33 +15,34 @@ app.use(morgan('combined')); // Active le middleware de logging
 
 var connection = mysql.createConnection({host:'localhost',user:'root',password:'',database:'pictionnary'});
 
-function RequestCheckSQL(username, password, res) {
-    connection.query("SELECT * FROM users WHERE email='"+username+"' AND password='"+password+"'",
+function RequestCheck(username, password, res) {
+    connection.query("SELECT * FROM users WHERE email='" + username + "' AND password='" + password + "'",
         function (err, rows, fields) {
-        if(!err)
-            if (rows.length > 0) {
-                session.id = rows[0].id;
-                session.nom = rows[0].nom;
-                session.prenom = rows[0].prenom;
-                session.profilepic = rows[0].profilepic;
-                session.couleur = rows[0].couleur;
-                res.redirect('/profile');
-            }
+            if (!err)
+                if (rows.length > 0) {
+                    session.id = rows[0].id;
+                    session.nom = rows[0].nom;
+                    session.prenom = rows[0].prenom;
+                    session.profilepic = rows[0].profilepic;
+                    session.couleur = rows[0].couleur;
+                    res.redirect('/profile');
+                }
+                else
+                    res.redirect('/login');
             else
-                res.redirect('/login');
-        else
-            logger.error(err);
-    });
+                logger.error(err);
+        });
 }
 
-function RequestSubscribeSQL(info, res) {
+function RequestSubscribe(info, res) {
     connection.query("INSERT INTO users" +
         "(email,password,nom,prenom,tel,website,sexe,birthdate,ville,taille,couleur,profilepic)" +
-        "VALUES ('"+info.email+"','"+info.password+"','"+info.nom+"','"+info.prenom+"','"+info.tel+"','" +
-        ""+info.website+"','"+info.sexe+"','"+info.birthdate+"','"+info.ville+"','"+info.taille+"','" +
-        info.couleur+"','"+info.profilepic+"')", function (err, rows, fields) {
-        if(!err) {
-            connection.query("SELECT * FROM users WHERE email='"+info.email+"' AND password='"+info.password+"'",
+        "VALUES ('" + info.email + "','" + info.password + "','" + info.nom + "','" + info.prenom + "','" +
+        info.tel + "','" + info.website + "','" + info.sexe + "','" + info.birthdate + "','" +
+        info.ville + "','" + info.taille + "','" + info.couleur + "','" + info.profilepic + "')",
+        function (err, rows, fields) {
+        if (!err) {
+            connection.query("SELECT * FROM users WHERE email='" + info.email + "' AND password='" + info.password + "'",
                 function (err, rows, fields) {
                 session.id = rows[0].id;
                 session.nom = rows[0].nom;
@@ -60,21 +61,40 @@ function RequestSubscribeSQL(info, res) {
 
 function RecordDraw(id, commands, picture, res) {
     connection.query("INSERT INTO drawings (id,commands,picture) VALUES" +
-        "("+id+",'"+commands+"','"+picture+"')", function (err, rows, fields) {
-        if(!err)
+        "(" + id + ",'" + commands + "','" + picture + "')", function (err, rows, fields) {
+        if (!err)
             res.redirect('/profile');
         else
             logger.error(err);
     });
 }
 
+function RequestChange(info, res) {
+    connection.query("UPDATE users SET " +
+        "password='" + info.password + "',tel='" + info.tel + "',website='" + info.website + "',ville='" + info.ville +
+        "',taille='" + info.taille + "',couleur='" + info.couleur + "',profilepic='" + info.profilepic + "'" +
+        " WHERE id=" + session.id, function (err, rows, fields) {
+        if (!err) {
+            connection.query("SELECT * FROM users WHERE id=" + session.id, function (err, rows, fields) {
+                session.profilepic = rows[0].profilepic;
+                session.couleur = rows[0].couleur;
+                res.redirect('/profile');
+            });
+        }
+        else {
+            logger.error(err);
+            res.redirect('/modification');
+        }
+    });
+}
+
 logger.info('server start');
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
     res.redirect('/login');
 });
 
-app.get('/login', function(req, res){
+app.get('/login', function(req, res) {
     res.render('login');
 });
 
@@ -82,12 +102,12 @@ app.post('/login', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     if (username != null && password != null)
-        RequestCheckSQL(username, password, res);
+        RequestCheck(username, password, res);
     else
         res.redirect('/login');
 });
 
-app.get('/inscription', function(req, res){
+app.get('/inscription', function(req, res) {
     res.render('inscription');
 });
 
@@ -109,10 +129,10 @@ app.post('/inscription', function(req, res) {
 	var info = {email:email, password:password, nom:nom, prenom:prenom, tel:tel,
 		website:website, sexe:sexe, birthdate:birthdate, ville:ville, taille:taille,
 		couleur:couleur.substr(1,6), profilepic:profilepic};
-    RequestSubscribeSQL(info, res);
+    RequestSubscribe(info, res);
 });
 
-app.get('/paint', function(req, res){
+app.get('/paint', function(req, res) {
     res.render('paint',{id:session.id, couleur:session.couleur});
 });
 
@@ -123,12 +143,41 @@ app.post('/paint', function(req, res) {
     RecordDraw(id, commands, picture, res);
 });
 
-app.get('/profile', function(req, res){
+app.get('/modification', function(req, res) {
+    res.render('modification');
+});
+
+app.post('/modification', function(req, res) {
+    var password = req.body.password;
+    var tel = req.body.tel;
+    var website = req.body.website;
+    var ville = req.body.ville;
+    var taille = req.body.taille;
+    var couleur = req.body.couleur;
+    var profilepic = req.body.profilepic;
+    var info = {password:password, tel:tel, website:website, ville:ville,
+        taille:taille, couleur:couleur.substr(1,6), profilepic:profilepic};
+    RequestChange(info, res);
+});
+
+app.get('/profile', function(req, res) {
     res.render('profile',{id:session.id, nom:session.nom, prenom:session.prenom, profilepic:session.profilepic});
 });
 
-app.get('/guess', function(req, res){
-    connection.query("SELECT commands FROM drawings WHERE id='"+session.id+"'", function (err, rows, fields) {
+app.get('/suppression', function(req, res) {
+    connection.query("DELETE FROM users WHERE id=" + session.id, function (err, rows, fields) {
+        if (!err) {
+            res.render('suppression');
+        }
+        else {
+            logger.error(err);
+            res.render('profile');
+        }
+    });
+});
+
+app.get('/guess', function(req, res) {
+    connection.query("SELECT commands FROM drawings WHERE id=" + session.id, function (err, rows, fields) {
         if (!err)
             if (rows.length > 0) {
                 session.commands = rows[0].commands;
@@ -139,7 +188,7 @@ app.get('/guess', function(req, res){
     });
 });
 
-app.get('/logout', function(req, res){
+app.get('/logout', function(req, res) {
     session.id = null;
     session.nom = null;
     session.prenom = null;

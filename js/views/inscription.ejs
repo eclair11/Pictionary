@@ -8,7 +8,6 @@
 	action: c'est pour indiquer le script à exécuter pour traiter les données saisis
 	method: c'est pour préciser le type d'envoie des données, généralement post ou get
 	-->
-	
     <!-- qu'y a-t-il d'autre comme possiblité que post pour l'attribut method ? -->
 	<!--
 	l'autre possiblité, c'est d'utiliser get
@@ -170,8 +169,7 @@
                     // on récupère le canvas où on affichera l'image  
                     var canvas = document.getElementById("preview");  
                     var ctx = canvas.getContext("2d");  
-                    // on réinitialise le canvas: on l'efface, et déclare sa largeur et hauteur à 0  
-                    //ctx.setFillColor("white");
+                    // on réinitialise le canvas: on l'efface, et déclare sa largeur et hauteur à 0
                     ctx.fillRect(0,0,canvas.width,canvas.height);  
                     canvas.width=0;  
                     canvas.height=0;  
@@ -199,15 +197,13 @@
                             var MAX_WIDTH = 96;  
                             var MAX_HEIGHT = 96;  
                             var width = img.width;  
-                            var height = img.height;  
-  
+                            var height = img.height;
                             // A FAIRE: si on garde les deux lignes suivantes, on rétrécit l'image mais elle sera déformée  
                             // Vous devez supprimer ces lignes, et modifier width et height pour:  
                             //    - garder les proportions,   
                             //    - et que le maximum de width et height soit égal à 96  
                             width = MAX_WIDTH;
                             height = MAX_HEIGHT;
-
                             canvas.width = width;  
                             canvas.height = height;  
                             // on dessine l'image dans le canvas à la position 0,0 (en haut à gauche)  
