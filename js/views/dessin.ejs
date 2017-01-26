@@ -1,0 +1,26 @@
+<% var title = 'Dessin' %>
+<% include head.ejs %>
+
+<script>
+    var tab=[];
+    var num=0;
+    var img=",";
+    for(var i=0; i<'<%= picture %>'.length; i++) {
+        if ('<%= picture %>'[i]==",") {
+            tab[num] = img;
+            num++;
+            img = "";
+        }
+        img += '<%= picture %>'[i];
+    }
+    tab[num++] = img;
+    var j=0;
+    while(j<tab.length) {
+        document.write("<img src=" + (tab[j] + tab[++j]).substr(1) + " />");
+        j++;
+    }
+</script>
+
+<input type="button" onclick="document.location.href='profile'" value="Retour"/>
+
+<% include foot.ejs %>

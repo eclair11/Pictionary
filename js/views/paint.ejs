@@ -35,13 +35,6 @@
         var startDrawing = function(e) {
             console.log("start");
             // crér un nouvel objet qui représente une commande de type "start", avec la position, la couleur
-            var command = {};
-            command.command="start";
-            command.x=e.x;
-            command.y=e.y;
-            command.color=e.color;
-            command.size=e.size;
-            //c'est équivalent à:
             command = {"command":"start", "x": e.x, "y": e.y, "color": e.color, "size": e.size};
             // Ce genre d'objet Javascript simple est nommé JSON. Pour apprendre ce qu'est le JSON,
             // c.f. http://blog.xebia.fr/2008/05/29/introduction-a-json/
@@ -53,6 +46,7 @@
             context.stroke();
             context.fillStyle = color;
             context.fill();
+            context.closePath();
             isDrawing = true;
         };
 
@@ -73,6 +67,7 @@
                 context.stroke();
                 context.fillStyle = color;
                 context.fill();
+                context.closePath();
             }
         };
 

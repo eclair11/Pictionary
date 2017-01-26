@@ -2,8 +2,6 @@
 <% include head.ejs %>
 
 <script>
-    if('<%= id %>' == "")
-        document.location.href="login";
     document.write("<h1>Bienvenue <%= nom %> <%= prenom %></h1>");
     document.write("<img src=<%= profilepic %> />");
     document.write("<br/>");
@@ -13,7 +11,11 @@
     document.write("<br/>");
     document.write("<a href='/suppression'>Supprimer le compte</a>");
     document.write("<br/>");
+    document.write("<a href='/dessin'>Dessin</a>");
+    document.write("<br/>");
     document.write("<a href='/logout'>Déconnexion</a>");
+    document.write("<br/>");
+    document.write("<a href='/guess'>Guess</a>");
 </script>
 
 <% include foot.ejs %>

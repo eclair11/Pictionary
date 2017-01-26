@@ -18,7 +18,7 @@ var connection = mysql.createConnection({host:'localhost',user:'root',password:'
 function RequestCheck(username, password, res) {
     connection.query("SELECT * FROM users WHERE email='" + username + "' AND password='" + password + "'",
         function (err, rows, fields) {
-            if (!err)
+            if (!err) {
                 if (rows.length > 0) {
                     session.id = rows[0].id;
                     session.nom = rows[0].nom;
@@ -29,9 +29,10 @@ function RequestCheck(username, password, res) {
                 }
                 else
                     res.redirect('/login');
+            }
             else
                 logger.error(err);
-        });
+    });
 }
 
 function RequestSubscribe(info, res) {
@@ -60,7 +61,7 @@ function RequestSubscribe(info, res) {
 }
 
 function RecordDraw(id, commands, picture, res) {
-    connection.query("INSERT INTO drawings (id,commands,picture) VALUES" +
+    connection.query("INSERT INTO drawings (iduser,commands,picture) VALUES" +
         "(" + id + ",'" + commands + "','" + picture + "')", function (err, rows, fields) {
         if (!err)
             res.redirect('/profile');
@@ -124,8 +125,7 @@ app.post('/inscription', function(req, res) {
 	var taille = req.body.taille;
 	var couleur = req.body.couleur;
 	var profilepic = req.body.profilepic;
-	if (sexe == null)
-	    sexe = "T";
+	if (sexe == null) sexe = "T";
 	var info = {email:email, password:password, nom:nom, prenom:prenom, tel:tel,
 		website:website, sexe:sexe, birthdate:birthdate, ville:ville, taille:taille,
 		couleur:couleur.substr(1,6), profilepic:profilepic};
@@ -133,10 +133,12 @@ app.post('/inscription', function(req, res) {
 });
 
 app.get('/paint', function(req, res) {
+    if(session.id == null) res.redirect('/login');
     res.render('paint',{id:session.id, couleur:session.couleur});
 });
 
 app.post('/paint', function(req, res) {
+    if(session.id == null) res.redirect('/login');
     var id = session.id;
     var commands = req.body.drawingCommands;
     var picture = req.body.picture;
@@ -144,10 +146,12 @@ app.post('/paint', function(req, res) {
 });
 
 app.get('/modification', function(req, res) {
+    if(session.id == null) res.redirect('/login');
     res.render('modification');
 });
 
 app.post('/modification', function(req, res) {
+    if(session.id == null) res.redirect('/login');
     var password = req.body.password;
     var tel = req.body.tel;
     var website = req.body.website;
@@ -161,30 +165,58 @@ app.post('/modification', function(req, res) {
 });
 
 app.get('/profile', function(req, res) {
+    if(session.id == null) res.redirect('/login');
     res.render('profile',{id:session.id, nom:session.nom, prenom:session.prenom, profilepic:session.profilepic});
 });
 
-app.get('/suppression', function(req, res) {
-    connection.query("DELETE FROM users WHERE id=" + session.id, function (err, rows, fields) {
+app.get('/guess', function(req, res) {
+    if(session.id == null) res.redirect('/login');
+    connection.query("SELECT commands FROM drawings WHERE iduser=" + session.id, function (err, rows, fields) {
         if (!err) {
-            res.render('suppression');
+            if (rows.length > 0) {
+                session.commands = rows[0].commands;
+                res.render('guess',{commands: session.commands});
+            }
+            else
+                res.redirect('/profile');
         }
         else {
             logger.error(err);
-            res.render('profile');
+            res.redirect('/profile');
         }
     });
 });
 
-app.get('/guess', function(req, res) {
-    connection.query("SELECT commands FROM drawings WHERE id=" + session.id, function (err, rows, fields) {
-        if (!err)
+app.get('/dessin', function(req, res) {
+    if(session.id == null) res.redirect('/login');
+    var tab = [];
+    connection.query("SELECT picture FROM drawings WHERE iduser=" + session.id,
+        function (err, rows, fields) {
+        if (!err) {
             if (rows.length > 0) {
-                session.commands = rows[0].commands;
-                res.render('guess', {commands: session.commands});
+                for (var i in rows)
+                    tab[i] = rows[i].picture;
+                res.render('dessin',{picture: tab});
             }
-        else
+            else
+                res.redirect('/profile');
+        }
+        else {
             logger.error(err);
+            res.redirect('/profile');
+        }
+    });
+});
+
+app.get('/suppression', function(req, res) {
+    if(session.id == null) res.redirect('/login');
+    connection.query("DELETE FROM users WHERE id=" + session.id, function (err, rows, fields) {
+        if (!err)
+            res.render('suppression');
+        else {
+            logger.error(err);
+            res.redirect('/profile');
+        }
     });
 });
 
@@ -194,6 +226,8 @@ app.get('/logout', function(req, res) {
     session.prenom = null;
     session.profilepic = null;
     session.couleur = null;
+    session.idpic = null;
     session.commands = null;
+    session.picture = null;
     res.render('logout');
 });
