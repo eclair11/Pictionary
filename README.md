@@ -1,2 +1,4 @@
-* Projet Web-Sémantique (NodeJS + PHP)
-ROMDAN Elias
+# Pictionary
+
+**Membres du groupe :**
+* ROMDAN Elias
